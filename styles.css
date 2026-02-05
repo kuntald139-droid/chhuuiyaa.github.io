@@ -13,7 +13,9 @@ body{
 }
 .stage{width:100%;max-width:620px;padding:32px}
 .card{
-  background:var(--card);
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding:28px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.12);
   text-align:center;
 }
@@ -25,6 +27,35 @@ h1{margin:0 0 8px;font-size:28px}
 .btn.no{background:#f2f2f2}
 .hint{margin-top:16px;color:#666}
 #confetti{position:fixed;inset:0;pointer-events:none}
+#start-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 192, 203, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s;
+}
+#start-overlay.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+.start-content {
+  background: rgba(255,255,255,0.7);
+  border-radius: 18px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+  padding: 32px 24px;
+  text-align: center;
+}
+.start-content h2 {
+  margin: 0 0 10px;
+  font-size: 2em;
+}
+.start-content p {
+  margin: 0 0 18px;
+  font-size: 1.1em;
+}
 /* small screen tweaks */
 @media(max-width:420px){.buttons{flex-direction:column}.btn{width:100%}}
 @media (max-width: 600px) {
