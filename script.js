@@ -3,8 +3,8 @@ const yes = document.getElementById('yes');
 const no = document.getElementById('no');
 const buttons = document.getElementById('buttons');
 const confetti = document.getElementById('confetti');
-const sweetAudio = new Audio('assets/sweet.mp3');
-const loveAudio = new Audio('assets/love.mp3');
+const sweetAudio = new Audio('./sweet.mp3');
+const loveAudio = new Audio('./love.mp3');
 let moveCount = 0;
 
 // prevent selecting No by moving it away when hovered, focused, touched, or pressed
@@ -115,3 +115,4 @@ no.addEventListener('focus', () => {
 
 // ensure initial focus
 yes.focus();
+
