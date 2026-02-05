@@ -3,16 +3,32 @@ const yes = document.getElementById('yes');
 const no = document.getElementById('no');
 const buttons = document.getElementById('buttons');
 const confetti = document.getElementById('confetti');
-const sweetAudio = new Audio('./sweet.mp3');
-const loveAudio = new Audio('./love.mp3');
+const sweetAudio = new Audio('assets/sweet.mp3');
+const loveAudio = new Audio('assets/love.mp3');
 let moveCount = 0;
 
-// prevent selecting No by moving it away when hovered, focused, touched, or pressed
+// --- Tap to Start overlay logic ---
+const startOverlay = document.getElementById('start-overlay');
+const startBtn = document.getElementById('start-btn');
+let gameEnabled = false;
+
+function enableGame() {
+  startOverlay.classList.add('hide');
+  setTimeout(() => startOverlay.style.display = 'none', 600);
+  gameEnabled = true;
+}
+
+startBtn.addEventListener('click', enableGame);
+
+// Block all game logic until started
 function moveNoButton(e) {
+  if (!gameEnabled) return;
   moveCount++;
-  // Play sound on every interaction
-  sweetAudio.currentTime = 0;
-  sweetAudio.play();
+  // Play sound on every interaction (now always inside a real event handler)
+  try {
+    sweetAudio.currentTime = 0;
+    sweetAudio.play();
+  } catch (err) {}
   // Increase movement on mobile (touch)
   let dx, dy;
   if (e && (e.type === 'touchstart' || window.innerWidth < 600)) {
@@ -35,25 +51,9 @@ function moveNoButton(e) {
   no.addEventListener(evt, moveNoButton);
 });
 
-// Guarantee sound plays on first interaction (for mobile restrictions)
-let soundPrimed = false;
-function primeSound() {
-  if (!soundPrimed) {
-    sweetAudio.play().catch(()=>{});
-    loveAudio.play().catch(()=>{});
-    sweetAudio.pause();
-    loveAudio.pause();
-    sweetAudio.currentTime = 0;
-    loveAudio.currentTime = 0;
-    soundPrimed = true;
-  }
-}
-['touchstart','mousedown','pointerdown'].forEach(evt => {
-  document.body.addEventListener(evt, primeSound, { once: true });
-});
-
 // if user manages to click No (should be impossible), nudge back to Yes flow
 no.addEventListener('click', (e) => {
+  if (!gameEnabled) return;
   e.preventDefault();
  
   alert("Nice try 😏 But the answer has to be YES!");
@@ -67,10 +67,14 @@ function resetNo(){
 
 // yes button celebration
 yes.addEventListener('click', () => {
+  if (!gameEnabled) return;
   showConfetti();
   yes.textContent = "She said YES! 💖";
-  loveAudio.currentTime = 0;
-  loveAudio.play();
+  try {
+    loveAudio.currentTime = 0;
+    loveAudio.play();
+  } catch (err) {}
+  document.body.style.background = 'url("img.jpeg") center center/cover no-repeat fixed';
   yes.disabled = true;
   no.disabled = true;
 });
@@ -115,4 +119,3 @@ no.addEventListener('focus', () => {
 
 // ensure initial focus
 yes.focus();
-
